@@ -8,8 +8,11 @@
     "start": "next start"
   },
   "dependencies": {
+    "@react-spring/web": "9.0.0-rc.3",
     "next": "10.0.7",
     "react": "17.0.1",
-    "react-dom": "17.0.1"
+    "react-dom": "17.0.1",
+    "tweakpane": "^1.5.9",
+    "use-tweaks": "https://github.com/Kerumen/use-tweaks#ssr-use-effect"
   }
 }

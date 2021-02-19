@@ -1,65 +1,53 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import React from "react"
+import { a, useSpring } from "@react-spring/web"
+import { useTweaks } from "use-tweaks"
 
-export default function Home() {
+export default function App() {
+  const { interpolation, ...config } = useTweaks("Spring", {
+    interpolation: { value: 0, min: 0, max: 1 },
+    mass: { value: 1, min: 1, max: 10 },
+    tension: { value: 170, min: 1, max: 200 },
+    friction: { value: 26, min: 1, max: 30 },
+  })
+
+  const type = useTweaks("Text", {
+    text: "poimandres",
+    color: "#fff",
+    fontSize: { value: 175, min: 150, max: 250 },
+    letterSpacing: "-0.08em",
+    lineHeight: "0.75em",
+    fontStyle: "italic",
+    "--var-weight": { min: 100, max: 900, value: 600 },
+    "--var-slant": { min: -10, max: 0, value: 0 },
+  })
+
+  const [{ s }] = useSpring({ s: interpolation, config }, [
+    interpolation,
+    config,
+  ])
+
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
+    <div className="center">
+      <a.div className="App">
+        <div className="title" style={type}>
+          {[...Array(10)].map((_, i) => (
+            <a.div
+              key={i}
+              style={{
+                willChange: "transform",
+                transform: s.to((s) => {
+                  const dir = i % 2 ? 1 : -1
+                  return `translate3d(${100 * dir + s * (500 * dir)}px,0,0)`
+                }),
+              }}
+            >
+              {[...Array(5)].map((_, i) => (
+                <span key={i}>{type.text}</span>
+              ))}
+            </a.div>
+          ))}
         </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
+      </a.div>
     </div>
   )
 }
